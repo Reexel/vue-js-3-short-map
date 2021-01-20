@@ -188,8 +188,9 @@ methods: {
   } 
 }
 ```
-! УСЛОВИЯ ПОДСЧЕТА ДЕЛАТЬ ТУТ
-! В эмит можно передавать сколько угодно данных   
+> ! УСЛОВИЯ ПОДСЧЕТА ДЕЛАТЬ ТУТ
+> ! В эмит можно передавать сколько угодно данных   
+
 3. При изменении локального параметра сделать копию в data
 ```angular2html
 data() { 
@@ -289,7 +290,7 @@ props: {
     <slot name="footer"></slot>
 </div>
 ```
-, где $slots - системный объект (дял просмотра можно использовать
+, где $slots - системный объект (для просмотра можно использовать
 ```angular2html
 mounted() { 
   log(this.$slots } // -> footer - имя слота 
@@ -333,7 +334,7 @@ computed: {
 ```    
 
 ### Сохранение данных в динамических формах 
-компоненты по умолчания перерисовывается! 
+компоненты по умолчанию перерисовывается! 
 чтобы избежать:
 ```angular2html
 <keep-alive>
@@ -385,7 +386,7 @@ this.$refs.myBtn.btnLog()
 ```angular2html
 import { createApp, defineAsyncComponent } from 'vue'
 ```
-3. добавить как компонент в приложение 
+4. добавить как компонент в приложение 
 ```angular2html
 app.component('async-component', defineAsyncComponent(() => {
   return import('./AppAsyncComponent') 
@@ -394,7 +395,7 @@ app.component('async-component', defineAsyncComponent(() => {
 , где async-component - название компонента 
       defineAsyncComponent - импортированная функция Vue должна вернуть импорт компонента 
      './AppAsyncComponent' - путь до компонента 
-4. убедиться
+5. убедиться
    > консоль-network-js-0.js(?)-Preview-Cntrl+f (слово из компонента)
 ```angular2html
 -> должно найти слово из компонента
