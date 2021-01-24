@@ -773,6 +773,7 @@ const mouseout = event => {
 }
 ```
 , где target - элемент для прослушки
+
 2. В unmouted(el) добавляем удаление слушателя
 ```angular2html
 el.removeEventListener('mouseover', mouseover)
