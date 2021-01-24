@@ -736,7 +736,7 @@ data() {
 },
 ```
 
-### Modifidies Модификаторы
+### Modifiers Модификаторы
 По факту метод к директиве, может быть несколько
 1. Добавить к директиве модификатор после точки
 ```angular2html
@@ -752,12 +752,12 @@ mounted(el, binding) {
 > ### Добавление мигания элемента
 > ```angular2html
 > if(binding.modifiers.blink) {
->            let flag = true
->            interval = setInterval(() => {
->                el.style.color = flag ? '#fff' : binding.value
->                flag = !flag
->            }, 500)
->        }
+>   let flag = true
+>     interval = setInterval(() => {
+>       el.style.color = flag ? '#fff' : binding.value
+>       flag = !flag
+>     }, 500)
+>  }
 > ```
 
 ### Добавление события к модификатору
