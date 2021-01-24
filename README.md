@@ -600,3 +600,188 @@ methods: {
 ```angular2html
 this.$emit('update:value', event.target.value)
 ```    
+
+## Mixins Миксины
+Необходимы для вынося повторяющего функционала
+1. Создать файл миксина src/alertMixin.js
+2. Вынести в него повторяющие методы, данные
+```angular2html
+export default {
+  data() {
+    return {
+      alert: false
+    }
+  },
+  methods: {
+    toggleAlert() {
+      this.alert = !this.alert
+    }
+  }
+}
+```
+3. импортировать миксин в файл, где его нужно применить
+```angular2html
+import alertMixin from "@/alertMixin";
+```
+4. добавить в экспорт
+```angular2html
+mixins: [alertMixin],
+```
+5. использование методов и данных в данном файле
+```angular2html
+<button class="btn primary" @click="toggleAlert">{{ alert ? 'Hide info' : 'Show info' }}</button>
+```
+
+## Directives Директивы
+Создание своих директив помимо стандратных v-if, v-for и т.д.
+#### В глобальной области видимости
+1. В main.js добавить метод директивы к прлиожению
+```angular2html
+.directive('focus', { //будет v-focus
+  mounted(el) { //хуки
+    el.focus()
+  }
+})
+```
+2. Добавить директиву (v-focus) для элемента
+```angular2html
+<input v-focus id="inp" type="text">
+```
+
+#### Локальная область видимости
+1. В используемом файле добавить
+```angular2html
+directives: {
+  focus: { //ключ - название директивы
+    mounted(el) {
+      el.focus();
+    }
+  }
+},
+```
+2. Добавить директиву (v-focus) для элемента
+```angular2html
+<input v-focus id="inp" type="text">
+```
+
+#### В отдельном файле
+1. Создать файл (focusDirective.js)
+2. Добавить в этот файл описание директивы
+```angular2html
+export default {
+  mounted(el) {
+    el.focus();
+  }
+}
+```
+3. Импортировать в используемый файл:
+```angular2html
+import focusDirective from './focusDirective';
+```
+4. Добавить там же в директивы
+```angular2html
+directives: {
+  focus: focusDirective,
+}
+```
+5. Добавить директиву (v-focus) для элемента
+```angular2html
+<input v-focus id="inp" type="text">
+```
+
+### Жизненные циклы директивы
+1. created // хук до добавления элемента
+2. beforeMount // перед монтированием элемента
+3. mounted // элемент в DOM-структуре документа
+4. beforeUpdate // перед обновлением элемента
+5. update // обновление элемента
+6. beforeUnmount // перед удалением элемента из DOM-дерева
+7. unmounted // удаление элемента (уничтожение)
+
+### Mounted
+mounted(el, binding) {
+, где el - текущий элемент
+      binding - объект Proxy
+
+#### Изменение динамических параметров
+1. для доступа к значению
+```angular2html
+binding.value
+```
+2. изменение значения элемента:
+```angular2html
+el.style.color = binding.value
+```
+В mounted событие произойдет только один раз, поэтому для многократного применения используется updated(el, binding)
+
+### Передача параметров в директиву
+1. К директиве добавить
+```angular2html
+v-color:[type] // появление arg в Proxy объекта
+```
+2. Обращение к аргументу
+```angular2html
+el.style[binding.arg] = binding.value
+```
+3. Изменение аргумента снаружи
+```angular2html
+<button class="btn" @click="type = type === 'color' ? 'backgroundColor' : 'color'">Change type</button>
+```
+4. Добавить в дата
+```angular2html
+data() {
+  return {
+    type: 'color', //type - переменная для параметра, color - навзание аргумента
+  }
+},
+```
+
+### Modifidies Модификаторы
+По факту метод к директиве, может быть несколько
+1. Добавить к директиве модификатор после точки
+```angular2html
+<h2 v-color:[type].blink.hover="myColor">Talk about directives</h2>
+```
+2. Проверить существование в описаниии директивы
+```angular2html
+mounted(el, binding) {
+  if(binding.modifiers.blink) {
+```
+3. Добавить логику после проверки
+
+> ### Добавление мигания элемента
+> ```angular2html
+> if(binding.modifiers.blink) {
+>            let flag = true
+>            interval = setInterval(() => {
+>                el.style.color = flag ? '#fff' : binding.value
+>                flag = !flag
+>            }, 500)
+>        }
+> ```
+
+### Добавление события к модификатору
+1. Создать отдельный метод с основной логикой и для корректного удаления слушателя, так как после unmounted элемента нет, а слушатель остается
+```angular2html
+const mouseover = event => {
+    console.log('mouseover')
+    event.target.style.color = 'red'
+}
+const mouseout = event => {
+    console.log('mouseout')
+    event.target.style.color = defaultColor
+}
+```
+, где target - элемент для прослушки
+2. В unmouted(el) добавляем удаление слушателя
+```angular2html
+el.removeEventListener('mouseover', mouseover)
+el.removeEventListener('mouseout', mouseout)
+```
+3. При mounted после проверки существования модификатора устанавливаем слушателя
+```angular2html
+if(binding.modifiers.hover) {
+  el.addEventListener('mouseover', mouseover) //модификатор + функция
+  el.addEventListener('mouseout', mouseout)
+}
+```
