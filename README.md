@@ -786,3 +786,91 @@ if(binding.modifiers.hover) {
   el.addEventListener('mouseout', mouseout)
 }
 ```
+
+## Плагины
+Для расширения базового функционала
+### Создание плагина
+1. Создаем файл плагина (translatePlugin.js)
+2. Импортируем в main.js
+```angular2html
+import translatePlugin from "@/translatePlugin";
+```
+3. Вызвать в приложении метод use
+```angular2html
+const app = createApp(App)
+app.use(translatePlugin)
+app.mount('#app')
+```
+4. В созданном файле плагина реализуем минимальный метод install
+```angular2html
+export default {
+    install(app, options) { //app - приложение, options - параметры, объект {test: 1}
+        console.log(app);
+        console.log(options);
+    }
+}
+```
+
+### Создание метода в плагине
+1. в install(app, options) 
+```angular2html
+app.config.globalProperties.$alert = text =>{ // создание глобальных свойств ($alert)
+  window.alert(text)
+}
+```
+2. Вызов метода
+```angular2html
+<button class="btn" @click="$alert('Wow! it is working!')">Click</button>
+```
+-- или
+```angular2html
+mounted() {
+  this.$alert('Wow! it is method!')
+}
+```
+-- или (для сложного варианта)
+3. Создать метод в плагине:
+```angular2html
+app.config.globalProperties.$i18n = key => {
+  return key.split('.').reduce((words, k) => {
+    return words[k] || '=== UNKNOWN ==='
+  }, options[current])
+}
+```
+4. Передать его между плагинами с помощью provide
+```angular2html
+app.provide('changeI18N', changeLanguage)
+```
+5. Создать там же метод, передаваемый в provide
+```angular2html
+const changeLanguage = name => {
+  console.log(name)
+  return name === 'en' ? 'ru' : 'en'
+}
+```
+6. Принять в нужном файле через inject
+```angular2html
+inject: ['changeI18N'],
+```
+7. Создать метод для вызова
+```angular2html
+methods: {
+  changeLang() {
+    console.log('B', this.lang)
+    this.lang = this.changeI18N(this.lang) //вызывается инжектированный метод
+    console.log('A', cthis.lang)
+    this.$forceUpdate() // и принудительно обновляется
+  }
+ }
+}
+```
+8. Проверить наличие в методе принудильного обноволения
+```angular2html
+this.$forceUpdate()
+```
+9. Вызвать созданный метод
+```angular2html
+<button class="btn" @click="changeLang">{{ $i18n('app.switchBtn') }}</button>
+```
+
+
