@@ -873,4 +873,17 @@ this.$forceUpdate()
 <button class="btn" @click="changeLang">{{ $i18n('app.switchBtn') }}</button>
 ```
 
-
+## Teleport
+Для семантического красоты кода
+1. Вставить в html 
+```angular2html
+<teleport to="body"> //указать элемент для переноса внутреннего содержимого или #modal
+  ...
+</teleport>
+```
+2. Исключить телепорт
+```angular2html
+<teleport to="body" disabled> //не переносит, например для видео
+  ...
+</teleport>
+```
