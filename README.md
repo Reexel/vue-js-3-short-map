@@ -1025,3 +1025,23 @@ computed: {
 ```angular2html
 { path: ':mailId?', component: AppEmailBody, props: true } 
 ```
+
+### Ручное управление состоянием ссылки
+Например, для подсвечивания пункта меню при выборе вложенного урл
+
+1. Добавить кастомизацию и v-slot в роутер 
+```angular2html
+<router-link custom v-slot="{ navigate, href }" to="/mail">
+```
+2. Добавить ссылку с @click и биндингом класса элемента:
+```angular2html
+<a href="#" @click="navigate" :class="{
+          ... // логика подсчета  
+          }">Почта</a>
+```
+3. Реализовать логику подсчета
+```angular2html
+active: $route.path.indexOf(href) !== -1
+```
+
+    
