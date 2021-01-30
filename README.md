@@ -887,3 +887,141 @@ this.$forceUpdate()
   ...
 </teleport>
 ```
+
+
+
+## Routers Роутеры
+Для перехода по "страницам" приложения
+
+1. Для начала нужно установить часть экосистемы вью - роутер
+```angular2html
+npm install vue-router@4
+```
+> //(см. версии)
+2. создаем файл router.js в корне проекта
+```angular2html
+import { createRouter, createWebHistory } from "vue-router";
+import Login from "@/views/Login";
+
+export default createRouter( {
+    history: createWebHistory(), //мод для сохранения истории, этот - обычно для веб-приложений
+    routes: [
+        { path: '/login', component: Login } //domain.ru:port/login
+    ]
+})
+```
+3. Для каждого роутера добавить path
+4. В main.js имортируем роутер
+```angular2html
+import router from './router'
+```
+5. Там же используем как компонент
+```angular2html
+createApp(App)
+  .use(router)  // <- использование роутера в проекте как плагин
+  .mount('#app')
+```
+
+
+### Использование роутера
+1. В верстке добавляем тэг
+```angular2html
+<router-view></router-view>
+```
+
+### Указание дополнительных путей
+alias
+Используется для перенаправления на нужные пути или, например, для страницы по умолчанию
+
+1. Указать в роутере alias
+```angular2html
+{ path: '/login', component: Login, alias: '/' },
+```
+
+
+### Динамечкие переходы
+Для SPA используется router-link
+
+1. В нужном месте указать тэг
+```angular2html
+<router-link to="/forget">Восстановить пароль</router-link>
+```
+
+
+### Название класса для активных ссылок
+1. Добавить в router.js
+```angular2html
+linkActiveClass: 'active',
+linkExactActiveClass: 'active',
+```
+
+
+### Запомнить урл при выходе
+Работа с query параметрами
+
+1. В методе можно передать объект
+```angular2html
+logout() {
+      this.isAuth = false
+      this.$router.push({
+        path: '/login',  // <- путь (как было раньше)
+        query: {         // <- формирование квери-парамтеров
+          page: this.$route.path  // <- квери-параметр с текущим урлом
+        }
+      })
+    }
+```
+2. В методе логина проверить существование квери и перекинуть пользователя по этому адресу:
+```angular2html
+if(this.$route.query.page) {
+        this.$router.push(this.$route.query.page)
+      }
+```
+
+
+### Динамические параметры в URL
+1. Добавить в router.js название передаваемого параметра после двоеточия
+```angular2html
+{ path: '/mail/:mailId?', component: Mail }, //<- ? показывает, что параметр не обязательный
+```
+2. Указать в принимающем файле в пропсах его название
+```angular2html
+props: ['mailId']
+```
+3. Отправить его в вызывающем компоненте
+```angular2html
+<app-email-body :mail-id="$route.params.mailId"></app-email-body>
+```
+4. Для получения данных в компоненте-получателе можно добавить computer-свойство:
+```angular2html
+computed: {
+  email() {
+    return this.emails.find(e => e.id == this.mailId)
+  }
+```
+5. На выходе шага 4 получаем объект, в котором можем использовать свойства
+```angular2html
+<h2>{{ email.theme }}</h2>
+```
+
+
+### Вложенные роуты
+1. В router.js добавляем childern и переносим параметры на уровень ниже
+```angular2html
+{ path: '/mail', component: Mail, children: [
+                { path: ':mailId', component: AppEmailBody}
+        ]},
+```
+2. Заменяем вывод компонента на конструкцию
+```angular2html
+<router-view></router-view>
+```
+3. Удалить регистрацию этого компонента
+4. В роутере передать разрешить использовать props
+```angular2html
+{ path: ':mailId', component: AppEmailBody, props: true } <- использование props: ['mailId'] в компоненте
+```
+5. Добавить маркер "?" необязательного параметра для отработки пути без параметра
+```angular2html
+{ path: ':mailId?', component: AppEmailBody, props: true } 
+```
