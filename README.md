@@ -1099,5 +1099,25 @@ if(to.meta.cantEnter) {
 next()
 ```
 
+### Порядок вызовов в роутере
+#### Порядок
+beforeEach         //router.js
+beforeEnter        //router.js
+beforeRouteEnter   //Dashboard.vue
+
+1. Доступ к методу на странице (в роутере)
+{
+            path: '/dashboard',
+            component: Dashboard,
+            name: 'home' ,
+            beforeEnter() {
+                console.log('beforeEnter')
+            }
+        },
+2. Доступ к методу на самой странице
+beforeRouteEnter() {
+    console.log('beforeRouteEnter')
+  }
+
 
 
