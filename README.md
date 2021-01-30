@@ -1093,10 +1093,13 @@ next() //<- не забыть для перехода на другие стра
 ```
 2. Использование имен
 ```angular2html
-if(to.meta.cantEnter) {
-  next({ name: 'home'})
-}
-next()
+router.beforeEach((to , from, next) => {
+  console.log('beforeEach')
+  if(to.meta.cantEnter) {
+    next({ name: 'home'})
+  }
+  next()
+})
 ```
 
 ### Порядок вызовов в роутере
