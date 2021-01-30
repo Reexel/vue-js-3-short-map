@@ -1101,9 +1101,9 @@ next()
 
 ### Порядок вызовов в роутере
 #### Порядок
->beforeEach         //router.js
->beforeEnter        //router.js
->beforeRouteEnter   //Dashboard.vue
+>1 .beforeEach         //router.js
+>2. beforeEnter        //router.js
+>3. beforeRouteEnter   //Dashboard.vue
 
 1. Доступ к методу на странице (в роутере)
 {
