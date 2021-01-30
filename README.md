@@ -1127,4 +1127,31 @@ beforeRouteEnter() {
   }
 ```
 
+## Остановка перехода на страницу
+1. Перед перехватом перехода создать name в роутере
+```angular2html
+{ path: '/mail', component: Mail, name: 'email'
+```
+2. Добавить переход
+```angular2html
+<router-link :to="{ name: 'email' }">To Mail</router-link>
+```
+3. Добавить метод в нужный компонент
+```angular2html
+beforeRouteLeave(to, from, next) {
+  ...
+}
+```
+4. Добавить в метод логику
+```angular2html
+beforeRouteLeave(to, from, next)     
+const answer = confirm('Перейти?')
+  if(answer) {
+    next()
+  } else {
+    next(false)
+  }
+}
+```
+
 
