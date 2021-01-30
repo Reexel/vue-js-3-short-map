@@ -1101,23 +1101,27 @@ next()
 
 ### Порядок вызовов в роутере
 #### Порядок
->1 .beforeEach         //router.js
->2. beforeEnter        //router.js
->3. beforeRouteEnter   //Dashboard.vue
+1 .beforeEach         //router.js
+2. beforeEnter        //router.js
+3. beforeRouteEnter   //Dashboard.vue
 
+#### Доступы до методов
 1. Доступ к методу на странице (в роутере)
+```angular2html
 {
-            path: '/dashboard',
-            component: Dashboard,
-            name: 'home' ,
-            beforeEnter() {
-                console.log('beforeEnter')
-            }
-        },
+  path: '/dashboard',
+  component: Dashboard,
+  name: 'home' ,
+  beforeEnter() {
+    console.log('beforeEnter')
+  }
+},
+```
 2. Доступ к методу на самой странице
+```angular2html
 beforeRouteEnter() {
     console.log('beforeRouteEnter')
   }
-
+```
 
 
