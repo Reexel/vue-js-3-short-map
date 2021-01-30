@@ -1155,3 +1155,12 @@ const answer = confirm('Перейти?')
 ```
 
 
+## Динамическая подгрузка страниц
+Lazy Loading
+1. Сделать импорт компонента функцией
+```angular2html
+const Mail = () => import('./views/Mail')
+```
+
+
+
