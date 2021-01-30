@@ -1057,7 +1057,47 @@ active: $route.path.indexOf(href) !== -1
 ```
 
 
-### 
+### Закрытие страниц от открытия по условиям
+Неоходимо для того, чтобы не давать доступ к страницам без авторизации
+1. В файле router.js создать переменную роутера
+```angular2html
+const router = createRouter( {
+...
+})
+```
+2. Вызвать метод beforeEach у данного объекта 
+```angular2html
+router.beforeEach((to , from, next) => {
+    ...
+})
+```
+3. Указать мета для нужного роутера, название meta произвольное
+```angular2html
+{ path: '/forget', component: Forget, meta: { cantEnter: true }
+```
+4. Создать логику для перехода в beforeEach
+```angular2html
+if(to.meta.cantEnter) {
+  next('/login')
+}
+next() //<- не забыть для перехода на другие страницы
+```
+5. Лучше использовать имена (см. Использование имен для страниц)
+
+### Использование имен для страниц
+Позволяет не зависеть от урл.
+
+1. Создать объект со свойством name в вызываемом методе
+```angular2html
+{ path: '/dashboard', component: Dashboard, name: 'home' },
+```
+2. Использование имен
+```angular2html
+if(to.meta.cantEnter) {
+  next({ name: 'home'})
+}
+next()
+```
 
 
-### 
+
