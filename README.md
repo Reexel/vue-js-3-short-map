@@ -1044,4 +1044,20 @@ computed: {
 active: $route.path.indexOf(href) !== -1
 ```
 
-    
+
+### 404 ошибка (переход на несуществую страницу)
+1. Указать в router.js путь:
+```angular2html
+{ path: '/:notFound(.*)', redirect: '/login'} //<- редирект на необходимую страницу
+```
+-- или
+1. Указать компонент вместо редиректа после его создания и импорта
+```angular2html
+{ path: '/:notFound(.*)', component: NotFound}
+```
+
+
+### 
+
+
+### 
