@@ -1211,5 +1211,85 @@ methods: {
 }
 ```
 
+### Упрощенный доступ к данным
+1. Через computed свойства
+```angular2html
+computed: {
+  counter() { //<- имя для использования
+    return this.$store.state.counter
+  }
+}
+```
+2. Использование упрощено
+<strong>Vuex: {{ counter }}</strong>
 
 ## Мутации
+Для предотвращения повторного использования кода в разных местах при вызове метода или логики используются мутации, которые описываются в store
+1. Добавляется в store.js с указанием метода
+```angular2html
+mutations: {
+  increment(state) { //<- первый параметр сам объект state, название метода произвольное
+    state.counter++ //<- логика измения параметра
+ }
+}
+```
+2. В приложении в методе пишем использование мутации с помощью слова commit
+```angular2html
+methods: {
+  increment() {
+    // this.$store.state.counter++
+    this.$store.commit('increment') //<- вызов созданной мутации
+  }
+}
+```
+-- или
+2. Вызвать коммит прямо в html-коде
+```angular2html
+this.$store.commit('increment')
+```
+### Передача параметров в мутацию
+1. Создать метод в мутации
+```angular2html
+add(state, payload) { // параметр
+  state.counter += payload
+}
+```
+2. Вызвать метод
+```angular2html
+<button class="btn primary" @click="add">Add2</button>
+```
+3. Тут же создать метод с вызовом commit
+```angular2html
+methods: {
+  add() { // метод вызова из п.2
+    this.$store.commit('add', 5) // вызов мутации с параметром
+  }
+}
+```
+4. Для передачи нескольких параметров использовать объект
+```angular2html
+this.$store.commit('add', {
+  a: 5,
+  ...
+  z: 48
+})
+```
+5. Для вызова параметров использовать свойство элемента
+```angular2html
+add(state, payload) { // параметр
+  state.counter += payload.a // вызов свойства элемента из п.4
+}
+```
+-- или
+5. Альтернативный вызов метода 
+```angular2html
+methods: {
+  add() {
+    // this.$store.commit('add', 5)
+    this.$store.commit({
+      type: 'add',
+      value: 5,
+    })
+  }
+}
+```
