@@ -1446,13 +1446,25 @@ import {mapGetters, mapActions} from 'vuex'
 
 #### Сокращении записи с помощью хелпера
 1. Импортировать mapGetters в нужном компоненте
+```angular2html
 import {mapGetters} from 'vuex'
+```
 2. Добавить или создать computed-свойства
+```angular2html
 computed: {
   ...mapGetters(['counter', 'doubleCounter'])
 },
+```
 -- или
 2. Сокращенный вариант, если не нужно расписывать
+```angular2html
 computed: mapGetters(['counter', 'doubleCounter']),
-3. Вместо <h2>Счетчик {{ $store.getters.counter }} ({{ $store.getters.doubleCounter }})</h2> пишем
+```
+3. Вместо 
+```angular2html
+<h2>Счетчик {{ $store.getters.counter }} ({{ $store.getters.doubleCounter }})</h2> \
+```
+пишем
+```angular2html
 <h2>Счетчик {{ counter }} ({{ doubleCounter }})</h2>
+```
