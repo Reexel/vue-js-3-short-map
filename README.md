@@ -1385,5 +1385,74 @@ actions: {
 }
 ```
 
+### Mappers
+Хелперы для облегчения работы с Vuex
 
-      
+#### Для работы с getters
+1. Импортировать в нужном компонете mapGetters
+2. Заменить высчитываемое значение
+```angular2html
+computed: {
+  // counter() {
+  //   return this.$store.state.counter
+  // },
+  ...mapGetters(['counter']), // замена
+},
+```
+
+#### Для работы с mutations
+1. Импортировать mapMutations
+```angular2html
+import {mapGetters, mapMutations} from 'vuex'
+```
+2. В методах создаем спред хелпера
+```angular2html
+...mapMutations(['add']),
+```
+3. И добавляем метод вызова с параметром
+```angular2html
+addFive() {
+  this.add({value: 5})
+```
+4. Для вызова метода используем
+```angular2html
+<button class="btn primary" @click="addFive">Add2</button> // <- название нового метода,не мутации!
+```
+-- НО! правильнее
+2. Добавить сперд хелпера
+```angular2html
+...mapMutations({
+  addFive: 'add'
+}),
+```
+3. Добавить метод с вызванными параметрами
+```angular2html
+add() {
+  this.addFive({value: 5})
+```
+### Для работы с actions
+1. Импортировать mapActions
+```angular2html
+import {mapGetters, mapActions} from 'vuex'
+```
+2. Добавить в методы спред
+```angular2html
+...mapActions(['incrementAsync'])
+```
+3. Вызвать в компоненте с забайденными переданными параметрами
+```angular2html
+<button class="btn danger" @click="incrementAsync({value: 10})">Add 10</button>
+```
+
+#### Сокращении записи с помощью хелпера
+1. Импортировать mapGetters в нужном компоненте
+import {mapGetters} from 'vuex'
+2. Добавить или создать computed-свойства
+computed: {
+  ...mapGetters(['counter', 'doubleCounter'])
+},
+-- или
+2. Сокращенный вариант, если не нужно расписывать
+computed: mapGetters(['counter', 'doubleCounter']),
+3. Вместо <h2>Счетчик {{ $store.getters.counter }} ({{ $store.getters.doubleCounter }})</h2> пишем
+<h2>Счетчик {{ counter }} ({{ doubleCounter }})</h2>
