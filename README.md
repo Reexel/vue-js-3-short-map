@@ -1225,6 +1225,7 @@ computed: {
 
 ## Мутации
 Для предотвращения повторного использования кода в разных местах при вызове метода или логики используются мутации, которые описываются в store
+>*Должны быть полностью синхронными!*
 1. Добавляется в store.js с указанием метода
 ```angular2html
 mutations: {
@@ -1293,3 +1294,96 @@ methods: {
   }
 }
 ```
+
+## Getters
+Для трансформации данных не затрагивая state (более правильно, чем использовать state)
+1. Создать в state.js
+```angular2html
+getters: {
+  counter(state) {
+    if(state.counter > 30) {
+      return 0
+    }
+    return state.counter
+  },
+}
+```
+2. Для отображения использовать
+```angular2html
+<h2>Счетчик {{ $store.getters.counter }}</h2>
+```
+3. Также можно использовать и геттеры внутри геттеров
+```angular2html
+getters: {
+  counter(state) {
+    if(state.counter > 30) {
+      return 0
+    }
+    return state.counter
+  },
+  doubleCounter(state, getters) { // передача в метод геттеров
+    return getters.counter * 2 // использование метода из геттера
+  }
+}
+```
+
+## Actions
+Изменение данных асинхронно, нельзя использовать мутации, поэтому используются actions
+1. Создать в store.js
+```angular2html
+actions: {
+  incrementAsync(context) {
+    setTimeout(() => {
+      context.commit('add', {
+        value: 10
+      })
+    }, 150)
+  }
+}
+```
+2. Вызвать в нужном компоненте или приложении при помощи dispatch
+```angular2html
+methods: {
+  ...
+  incrementAsync() {
+    this.$store.dispatch('incrementAsync')
+  }
+}
+```
+3. Также можно передать параметры
+```angular2html
+methods: {
+  ...
+  incrementAsync() {
+    this.$store.dispatch('incrementAsync', {
+      value: 10 //<- параметры
+    })
+  }
+}
+```
+4. Принять параметры в store.js
+```angular2html
+actions: {
+  incrementAsync(context, payload) { // переданные параметры
+    setTimeout(() => {
+      context.commit('add', payload) // использование параметров
+    }, 150)
+  }
+}
+```
+
+### Context
+Для сокращения записи можно использовать элементы контекст
+1. Например, commit
+```angular2html
+ actions: {
+  incrementAsync({ commit }, payload) { //<- элемент context
+    setTimeout(() => {
+      commit('add', payload) // сократилась запись
+    }, 150)
+  }
+}
+```
+
+
+      
