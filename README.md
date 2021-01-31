@@ -1164,3 +1164,52 @@ const Mail = () => import('./views/Mail')
 
 
 
+## Vuex
+Библиотека управления состоянием, абстрактная оболочка, для передачи информации от компонента к компоненту без использования цепочки передач (не provide-inject) для средних и крупных проектов.
+
+### Установка vuex
+1. Запустить в консоли, учитывая версию
+```angular2html
+npm install vuex@next --save
+```
+#### Использование vuex
+1. Создать в корне проекта(?) файл state.js
+```angular2html
+import { createStore } from 'vuex' //<- импортирование библиотеки
+
+export default createStore( { //<- экспорт в проект
+    state() { //<- наименование "хранилища"
+        return {
+            counter: 1 //<- переменные для хранения со значение по дефолту
+        }
+    }
+})
+```
+
+2. Импортировать хранилища в приложение main.js
+```angular2html
+import store from './store'
+```
+
+3. Для использования добавить в создание приложения
+```angular2html
+createApp(App)
+  .use(store)
+  .mount('#app')
+```
+
+4. Отобразить данные из хранилища
+```angular2html
+<h2>Счетчик {{ $store.state.counter }}</h2>
+```
+
+5. Изменять данные в хранилище с помощью метода increment
+```angular2html
+methods: {
+  increment() {
+  }
+}
+```
+
+
+## Мутации
