@@ -1595,3 +1595,18 @@ doubleCounter(state, getters, rootState, rootGetters) {
 }
 ```
 2. В данных переменных есть доступ к глобальным состоянию и методам 
+
+
+## Добавление плагинов
+В vuex есть плагин по умолчания для логирования
+1. Импортировать плагин
+```angular2html
+import { createStore, createLogger } from 'vuex'
+```
+2. Добавить в плагины
+```angular2html
+plugins: [
+  createLogger()
+],
+```
+3. В консоли идет лог
