@@ -1558,3 +1558,40 @@ computed: {
 <h1>{{ uppercaseTitle }}</h1>
 ```
 
+### Именованные модули с namespaced
+Для сокрытия одинаковых имен и исключения пересений
+1. Добавить в модуль скрываемый файл (counter.js)
+```angular2html
+namespaced: true, //скрытие произошло
+```
+2. Для доступа необходимо указать название метода в index.js
+```angular2html
+modules: {
+  count: counterModule
+},
+```
+3. Для геттеров:
+```angular2html
+computed: {
+  ...mapGetters(['uppercaseTitle']),
+  ...mapGetters('count', ['counter', 'doubleCounter'])  // добавить первым параметром название п.2
+},
+```
+4. Для методов и мутаций:
+```angular2html
+methods: {
+  ...mapMutations({add: 'count/increment'}),  // добавить к пути название п.2
+```
+5. Для экшенов:
+```angular2html
+...mapActions('count', ['incrementAsync']) // добавить первым параметром название п.2
+```
+
+### Для доступа к глобальным (верхним) состояниям и методам из нижестоящих
+1. Использовать третий и четвертый параметр в методе
+```angular2html
+doubleCounter(state, getters, rootState, rootGetters) {
+  return getters.counter * 2
+}
+```
+2. В данных переменных есть доступ к глобальным состоянию и методам 
