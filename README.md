@@ -1468,3 +1468,93 @@ computed: mapGetters(['counter', 'doubleCounter']),
 ```angular2html
 <h2>Счетчик {{ counter }} ({{ doubleCounter }})</h2>
 ```
+
+
+## Модули
+Для облегчения работы с проектами c названием модуля
+1. Создать файл ../src/store/modules/counter.js
+2. Написать логику для данного модуля
+```angular2html
+export default {
+    state() {
+        return {
+            counter: 1
+        }
+    },
+    mutations: {
+        increment(state) {
+            state.counter++
+        },
+        add(state, payload) { // параметр
+            state.counter += payload.value
+        }
+    },
+    getters: {
+        counter(state) {
+            // if(state.counter > 30) {
+            //     return 0
+            // }
+            return state.counter
+        },
+        doubleCounter(state, getters) {
+            return getters.counter * 2
+        }
+    },
+    actions: {
+        incrementAsync({ commit }, payload) {
+            setTimeout(() => {
+                commit('add', payload)
+            }, 150)
+        }
+    }
+}
+```
+3. Создать файл ../src/store/index.js
+4. Импортировать создание store
+```angular2html
+import { createStore } from 'vuex'
+```
+5. Импортировать модуль
+```angular2html
+import counterModule from './modules/counter'
+```
+6. Указать подключенный модуль
+```angular2html
+export default createStore( {
+  modules: {
+    count: counterModule
+  },
+}
+```
+7. Импортировать в main.js
+```angular2html
+import store from './store' // подключится файл index.js
+```
+8. Можно также использовать общий store в index.js
+```angular2html
+modules: {
+ count: counterModule
+},
+state() {
+  return {
+    appTitle: 'Vuex Working!'
+  }
+},
+getters: {
+  uppercaseTitle(state) {
+    return state.appTitle.toUpperCase()
+  }
+}
+
+```
+9. Для использования добавить в computed
+```angular2html
+computed: {
+  ...mapGetters(['counter', 'doubleCounter', 'uppercaseTitle'])
+},
+  ```
+10. Использование
+```angular2html
+<h1>{{ uppercaseTitle }}</h1>
+```
+
