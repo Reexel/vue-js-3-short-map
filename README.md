@@ -1614,7 +1614,7 @@ plugins: [
 # Composition API
 Для больших проектов. Заменяет **data, methods, computed, watch**
 
-## Формирование
+## Формирование data()
 1. удалить data, methods, computed, watch
 2. Добавить функцию setup
 3. Сделать импорт ref из vue
@@ -1641,3 +1641,33 @@ name, version
 <p>Название: <strong>{{ name }}</strong></p>
 ```
 
+## Формирование methods
+1. удалить methods, computed, watch
+2. Добавить функцию setup
+3. Сделать импорт ref из vue
+```angular2html
+import { ref } from 'vue'
+```
+4. Создать переменные в setup и вернуть их
+```angular2html
+setup() {
+  ...
+  function changeInfo() {
+    name.value = 'VueJS!'
+    version.value = 4
+  }
+ ...
+}
+```
+5. Не забыть давить в return
+```angular2html
+return {
+  ...
+  change: changeInfo // <- key: value
+  ...
+}
+```
+6. Использовать key
+```angular2html
+<p>Название: <strong>{{ name }}</strong></p>
+```
