@@ -1671,3 +1671,58 @@ return {
 ```angular2html
 <p>Название: <strong>{{ name }}</strong></p>
 ```
+7. Для работы функций для ref объектов типа RefImpl использовать value
+```angular2html
+function changeInfo() {
+  framework.value.name = 'VueJS!'
+  framework.value.version = 4
+}
+
+## Работа с объектами
+Для добавления реактивности используется reactive
+1. Добавить импорт reactive из vue
+```angular2html
+import { ref, reactive } from 'vue'
+```
+2. Добавить реактивности к констанстам и сделать их объектом
+```angular2html
+const framework = reactive({
+  name: 'VueJS',
+  version: 3
+})
+```
+3. Вернуть объект
+```angular2html
+return {
+  framework: framework,
+  change: changeInfo
+}
+```
+4. Для использования
+```angular2html
+<p>Название: <strong>{{ framework.name }}</strong></p>
+```
+5. Для работы функций используется реактивный объект типа Proxy
+```angular2html
+function changeInfo() {
+  framework.name = 'VueJS!'
+  framework.version = 4
+}
+```
+
+### Приведение реактивного объекта к ref при передаче нереактивных значений
+Для получения отдельних значений (не объектов) используется приведение к toRefs
+1. Имортировать toRefs из vue
+```angular2html
+import { ref, reactive, toRefs } from 'vue'
+```
+2. Вернуть приведенный к ref реактивный объект (см. Работа с объектами)
+```angular2html
+...toRefs(framework), // разворачивание объектам к отдельным значениям из объекта
+```
+3. Использование
+```angular2html
+<p>Название: <strong>{{ name }}</strong></p>
+```
+
+
