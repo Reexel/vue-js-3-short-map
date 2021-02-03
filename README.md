@@ -1610,3 +1610,34 @@ plugins: [
 ],
 ```
 3. В консоли идет лог
+
+# Composition API
+Для больших проектов. Заменяет **data, methods, computed, watch**
+
+## Формирование
+1. удалить data, methods, computed, watch
+2. Добавить функцию setup
+3. Сделать импорт ref из vue
+```angular2html
+import { ref } from 'vue'
+```
+4. Создать переменные в setup и вернуть их
+```angular2html
+setup() {
+  const name = ref('VueJS')
+  const version = ref(3)
+  
+  return {
+    name: name, version: version // <- key: value
+  }
+}
+```
+-- или
+```angular2html
+name, version
+```
+5. Использовать key
+```angular2html
+<p>Название: <strong>{{ name }}</strong></p>
+```
+
